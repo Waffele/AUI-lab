@@ -3,7 +3,10 @@ package pl.pg.aui.bookshelf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pg.aui.book.BookService;
+import pl.pg.aui.bookshelf.rest.BookshelfAlreadyExistsException;
+import pl.pg.aui.bookshelf.rest.BookshelfNotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,36 +14,43 @@ import java.util.Optional;
 public class BookshelfService {
 
     private BookshelfRepository bookshelfRepository;
-    private BookService bookService;
 
     @Autowired
-    public BookshelfService(BookshelfRepository bookshelfRepository, BookService bookService) {
+    public BookshelfService(BookshelfRepository bookshelfRepository) {
         this.bookshelfRepository = bookshelfRepository;
-        this.bookService = bookService;
     }
 
     public Optional<Bookshelf> findBookshelf(Long id) {
-        return bookshelfRepository.find(id);
+        return bookshelfRepository.findById(id);
     }
 
-    public void addBookshelf(Bookshelf bookshelf) {
-        bookshelfRepository.create(bookshelf);
+    public Optional<Bookshelf> findBookshelf(String category) {
+        return bookshelfRepository.findByCategory(category);
     }
 
-    public void deleteBook(Long id) {
-        Optional<Bookshelf> bookshelf = findBookshelf(id);
-        if (bookshelf.isEmpty()) {
-            return;
-        }
-        Bookshelf bookshelf1 = bookshelf.get();
-        if (bookService.findAll().stream().anyMatch(it -> it.getBookshelfId().equals(id))) {
-            return;
-        }
-        bookshelfRepository.delete(bookshelf1);
+    public Bookshelf addBookshelf(Bookshelf bookshelf) {
+        return bookshelfRepository.save(bookshelf);
+    }
+
+    public void deleteBookshelf(Long id) {
+        findBookshelf(id).ifPresent(it -> bookshelfRepository.delete(it));
+    }
+
+    @Transactional
+    public void deleteBookshelf(String category) {
+        bookshelfRepository.deleteByCategory(category);
     }
 
     public List<Bookshelf> findAll() {
         return bookshelfRepository.findAll();
     }
 
+    public Bookshelf updateBookshelf(String oldCategory, String newCategory) {
+        findBookshelf(newCategory).ifPresent(
+                it -> {throw new BookshelfAlreadyExistsException();}
+        );
+        Bookshelf bookshelf = findBookshelf(oldCategory).orElseThrow(BookshelfNotFoundException::new);
+        bookshelf.setCategory(newCategory);
+        return bookshelfRepository.save(bookshelf);
+    }
 }
