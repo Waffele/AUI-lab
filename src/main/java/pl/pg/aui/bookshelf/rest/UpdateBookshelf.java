@@ -14,7 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
-public class RenameBookshelfRequest {
+public class UpdateBookshelf {
     private String oldCategory;
     private String newCategory;
+    private int height;
 }

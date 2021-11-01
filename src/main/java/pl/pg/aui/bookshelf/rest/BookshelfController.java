@@ -47,9 +47,9 @@ public class BookshelfController {
     }
 
     @PutMapping
-    public BookshelfResponse updateBookshelf(@RequestBody RenameBookshelfRequest request) {
+    public BookshelfResponse updateBookshelf(@RequestBody UpdateBookshelf request) {
         return BookshelfResponse.fromBookshelf(
-                bookshelfService.updateBookshelf(request.getOldCategory(), request.getNewCategory())
+                bookshelfService.updateBookshelf(request)
         );
     }
 

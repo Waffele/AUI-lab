@@ -20,10 +20,12 @@ import java.util.ArrayList;
 @ToString
 public class CreateBookshelfRequest {
     private String category;
+    private int height;
 
     public Bookshelf toBookShelf() {
         return Bookshelf.builder()
                 .category(category)
+                .height(height)
                 .books(new ArrayList<>())
                 .id(0L)
                 .build();

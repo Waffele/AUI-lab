@@ -42,6 +42,8 @@ public class Bookshelf implements Serializable {
     @Column(unique = true)
     private String category;
 
+    private int height;
+
     @OneToMany(fetch = LAZY, mappedBy = "bookshelf", cascade = CascadeType.ALL)
     private List<Book> books;
 
