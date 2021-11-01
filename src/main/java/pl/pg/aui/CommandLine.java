@@ -28,8 +28,8 @@ public class CommandLine implements CommandLineRunner {
 
     @PostConstruct
     public void initLibrary() {
-        bookshelfService.addBookshelf(new Bookshelf(1L, "1"));
-        bookshelfService.addBookshelf(new Bookshelf(2L, "2"));
+        bookshelfService.addBookshelf(new Bookshelf(1L, "1", 6));
+        bookshelfService.addBookshelf(new Bookshelf(2L, "2", 6));
         bookService.addBook(new Book("title1", 100, "1", 1L));
         bookService.addBook(new Book("title12", 102, "12", 1L));
         bookService.addBook(new Book("title21", 103, "21", 2L));
@@ -62,7 +62,7 @@ public class CommandLine implements CommandLineRunner {
                                 new Book(inputs[2], Integer.parseInt(inputs[3]), inputs[4], Long.parseLong(inputs[5]))
                         );
                     } else if (inputs[1].equals("bookshelf")) {
-                        bookshelfService.addBookshelf(new Bookshelf(0L, inputs[2]));
+                        bookshelfService.addBookshelf(new Bookshelf(0L, inputs[2], Integer.parseInt(inputs[3])));
                     }
                     break;
                 case "delete":

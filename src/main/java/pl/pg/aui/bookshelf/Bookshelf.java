@@ -19,4 +19,5 @@ import java.io.Serializable;
 public class Bookshelf implements Serializable {
     private Long id;
     private String category;
+    private int height;
 }
