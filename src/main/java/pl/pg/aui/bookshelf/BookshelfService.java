@@ -2,12 +2,8 @@ package pl.pg.aui.bookshelf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.pg.aui.book.BookService;
-import pl.pg.aui.bookshelf.rest.BookshelfAlreadyExistsException;
-import pl.pg.aui.bookshelf.rest.BookshelfNotFoundException;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,18 +35,5 @@ public class BookshelfService {
     @Transactional
     public void deleteBookshelf(String category) {
         bookshelfRepository.deleteByCategory(category);
-    }
-
-    public List<Bookshelf> findAll() {
-        return bookshelfRepository.findAll();
-    }
-
-    public Bookshelf updateBookshelf(String oldCategory, String newCategory) {
-        findBookshelf(newCategory).ifPresent(
-                it -> {throw new BookshelfAlreadyExistsException();}
-        );
-        Bookshelf bookshelf = findBookshelf(oldCategory).orElseThrow(BookshelfNotFoundException::new);
-        bookshelf.setCategory(newCategory);
-        return bookshelfRepository.save(bookshelf);
     }
 }

@@ -28,10 +28,6 @@ public class BookService {
         return bookRepository.findByISBN(ISBN);
     }
 
-    public Book addBook(Book book) {
-        return bookRepository.save(book);
-    }
-
     @Transactional
     public Book addBook(Book book, String bookshelfCategory) {
         Bookshelf bookshelf = bookshelfService.findBookshelf(bookshelfCategory)
@@ -55,9 +51,6 @@ public class BookService {
                         () -> bookshelfService.addBookshelf(Bookshelf.builder()
                                 .category(bookshelfCategory)
                                 .build()));
-        if(bookInRepo.getBookshelf().getBooks().size() == 1) {
-            bookshelfService.deleteBookshelf(bookInRepo.getBookshelf().getId());
-        }
         book.setId(bookInRepo.getId());
         book.setBookshelf(bookshelf);
         return bookRepository.save(book);
