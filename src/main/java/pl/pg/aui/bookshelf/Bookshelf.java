@@ -2,9 +2,11 @@ package pl.pg.aui.bookshelf;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import pl.pg.aui.book.Book;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +25,7 @@ public class Bookshelf implements Serializable {
     @Column(unique = true)
     private String category;
     private int height;
+
+    @OneToMany(mappedBy="bookshelf", cascade = CascadeType.ALL)
+    private List<Book> books;
 }

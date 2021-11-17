@@ -5,11 +5,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import pl.pg.aui.book.rest.BookAlreadyExistsException;
 import pl.pg.aui.book.rest.BookNotFoundException;
+import pl.pg.aui.book.rest.BookResponse;
 import pl.pg.aui.bookshelf.Bookshelf;
 import pl.pg.aui.bookshelf.BookshelfService;
+import pl.pg.aui.bookshelf.rest.BookshelfNotFoundException;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,8 +47,8 @@ public class BookService {
     }
 
     @Transactional
-    public Book updateBook(Book book, String bookshelfCategory) {
-        Book bookInRepo = findBook(book.getISBN()).orElseThrow(BookNotFoundException::new);
+    public Book updateBook(Book book, String bookshelfCategory, String isbn) {
+        Book bookInRepo = findBook(isbn).orElseThrow(BookNotFoundException::new);
         Bookshelf bookshelf = bookshelfService.findBookshelf(bookshelfCategory)
                 .orElseGet(
                         () -> bookshelfService.addBookshelf(Bookshelf.builder()
@@ -68,4 +71,13 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public BookResponse findBookOfBookshelf(String isbn, String category) {
+        return BookResponse.fromBook(bookshelfService.findBookshelf(category)
+                .orElseThrow(BookshelfNotFoundException::new)
+                .getBooks()
+                .stream()
+                .filter(it -> Objects.equals(it.getISBN(), isbn))
+                .findFirst()
+                .orElseThrow(BookNotFoundException::new));
+    }
 }

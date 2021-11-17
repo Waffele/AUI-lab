@@ -41,7 +41,7 @@ public class BookController {
     @PutMapping
     public BookResponse updateBook(@RequestBody BookRequest request) {
         return BookResponse.fromBook(
-                bookService.updateBook(request.toBook(), request.getBookshelfCategory())
+                bookService.updateBook(request.toBook(), request.getBookshelfCategory(), request.getISBN())
         );
     }
 

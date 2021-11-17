@@ -41,7 +41,7 @@ public class Book implements Serializable {
     private String ISBN;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "bookshelf_id")
     private Bookshelf bookshelf;
 }
