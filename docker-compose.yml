@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    expose:
+      - "3306"
+      - "33006"
+  app:
+    build: .
+    ports:
+      - "9300:8080"
