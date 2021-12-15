@@ -11,5 +11,8 @@ services:
       - "33006"
   app:
     build: .
+    restart: always
     ports:
       - "9300:8080"
+    volumes:
+      - ./uploads:/uploads
